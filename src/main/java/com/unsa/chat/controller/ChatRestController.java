@@ -1,10 +1,13 @@
 package com.unsa.chat.controller;
 
 import com.unsa.chat.dto.ChatRoomDto;
+import com.unsa.chat.entity.ChatRoom;
 import com.unsa.chat.service.ChatService;
-import com.unsa.common.ResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/chats")
@@ -14,13 +17,13 @@ public class ChatRestController {
     private final ChatService chatService;
 
     @PostMapping("/room")
-    public ResponseDto createChatRoom(@RequestBody ChatRoomDto chatRoomDto) {
-        return chatService.createChatRoom(chatRoomDto);
+    public ResponseEntity<String> createChatRoom(@RequestBody ChatRoomDto chatRoomDto) {
+        return ResponseEntity.ok(chatService.createChatRoom(chatRoomDto));
     }
 
     @GetMapping("/rooms")
-    public ResponseDto getRoomList() {
-        return chatService.getRoomList();
+    public ResponseEntity<List<ChatRoom>> getRoomList() {
+        return ResponseEntity.ok(chatService.getRoomList());
     }
 
 }

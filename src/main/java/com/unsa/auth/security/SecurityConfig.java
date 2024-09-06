@@ -61,10 +61,10 @@ public class SecurityConfig {
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/"
-                                ,"/h2-console/**"
-                                ,"/favicon.ico"
-                                ,"/members/signup"
+                        .requestMatchers("/**"
+//                                ,"/h2-console/**"
+//                                ,"/favicon.ico"
+//                                ,"/members/signup"
                                 ,"/login"
                         )
                         .permitAll()

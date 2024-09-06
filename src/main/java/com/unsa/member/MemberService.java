@@ -6,6 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -14,15 +17,12 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public ResponseDto signup(SignupDto signupDto) {
-
-        String message = "";
+    public ResponseDto<Member> signup(SignupDto signupDto) {
 
         Member member = memberRepository.findByEmail(signupDto.getEmail()).orElse(null);
 
         if (member != null) {
-            message = "이미 존재하는 이메일입니다.";
-            return ResponseDto.fail(message);
+            return ResponseDto.error("duplicate e-mail");
         }
 
         member = Member.builder()
@@ -34,23 +34,19 @@ public class MemberService {
                 .role(RoleType.USER)
                 .build();
         memberRepository.save(member);
-        message = "회원 가입 성공.";
 
-        return ResponseDto.success(message, member);
+        return ResponseDto.success(member);
     }
 
-    public ResponseDto getMember(Long id) {
+    public ResponseDto<Member> getMember(Long id) {
 
-        String message = "";
         Member member = memberRepository.findById(id).orElse(null);
 
         if (member == null) {
-            message = "존재하지 않는 회원입니다.";
-            return ResponseDto.fail(message);
+            return ResponseDto.error("ID that does not exist");
         }
-        message = "회원 조회 성공.";
 
-        return ResponseDto.success(message, member);
+        return ResponseDto.success(member);
     }
 
 }

@@ -1,34 +1,25 @@
 package com.unsa.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
-@Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ResponseDto {
-
+@Data
+public class ResponseDto<T> {
     private String status;
     private String message;
-    private Object data;
+    private T data;
 
-    public static ResponseDto success(String message, Object data) {
-        return ResponseDto.builder()
-                .status("success")
-                .message(message)
-                .data(data)
-                .build();
+    private ResponseDto(String status, String message, T data) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
     }
 
-    public static ResponseDto fail(String message) {
-        return ResponseDto.builder()
-                .status("fail")
-                .message(message)
-                .data(null)
-                .build();
+    public static <T> ResponseDto<T> success(T data) {
+        return new ResponseDto<>("success", "operation successful", data);
+    }
+
+    public static <T> ResponseDto<T> error(String message) {
+        return new ResponseDto<>("error", message, null);
     }
 
 }

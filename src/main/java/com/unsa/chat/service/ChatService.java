@@ -6,7 +6,6 @@ import com.unsa.chat.repository.ChatRoomMemberRepository;
 import com.unsa.chat.repository.ChatRoomRepository;
 import com.unsa.chat.dto.ChatRoomDto;
 import com.unsa.chat.entity.ChatRoom;
-import com.unsa.common.ResponseDto;
 import com.unsa.member.Member;
 import com.unsa.chat.entity.ChatRoomMember;
 import com.unsa.member.MemberRepository;
@@ -14,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +24,8 @@ public class ChatService {
     private final ChatRoomMemberRepository chatRoomMemberRepository;
     private final MemberRepository memberRepository;
 
-    public ResponseDto createChatRoom(ChatRoomDto chatRoomDto) {
+    public String createChatRoom(ChatRoomDto chatRoomDto) {
 
-        String message = "";
         String email = chatRoomDto.getEmail();
         String roomName = chatRoomDto.getRoomName();
 
@@ -44,9 +43,7 @@ public class ChatService {
                 .build();
         chatRoomMemberRepository.save(chatRoomMember);
 
-        message = "채팅방 생성 성공.";
-
-        return ResponseDto.success(message, chatRoom);
+        return "채팅방 생성 성공.";
     }
 
     public ChatMessage saveChatMessage(Long roomId, String sender, String message) {
@@ -64,9 +61,7 @@ public class ChatService {
         return chatMessage;
     }
 
-    public ResponseDto getRoomList() {
-        List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
-        String message = "채팅방 전체 조회 성공.";
-        return ResponseDto.success(message, chatRoomList);
+    public List<ChatRoom> getRoomList() {
+        return chatRoomRepository.findAll();
     }
 }
